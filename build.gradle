@@ -1,0 +1,63 @@
+buildscript {
+  ext.kotlin_version = '1.1.2-4'
+
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    // Needed for the 'kotlin' plugin
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    // Needed for the 'org.springframework.boot' plugin
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE"
+    // Needed for the 'kotlin-spring' plugin
+    classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+
+  }
+}
+
+// Allows us to compile Kotlin files
+apply plugin: 'kotlin'
+// Does some extra work to set up Spring Boot.
+// Specifically this gives us the "bootRun" task we will be using
+apply plugin: 'org.springframework.boot'
+// Allows for improved interop between Kotlin and Spring
+apply plugin: 'kotlin-spring'
+
+apply plugin: 'war'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  // Kotlin Dependencies
+  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+  testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+
+  // Spring Dependencies
+//  compile("org.springframework.boot:spring-boot-starter-web") {
+//    exclude module: "spring-boot-starter-tomcat"
+//  }
+//  compile "org.springframework.boot:spring-boot-starter-jetty"
+  compile "org.springframework.boot:spring-boot-starter-actuator"
+
+  implementation("org.springframework.boot:spring-boot-starter-web")
+  providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+
+
+  compile 'com.squareup.okhttp3:okhttp:3.14.0'
+  compile 'com.google.code.gson:gson:2.8.5'
+
+  // Jackson Dependencies
+  compile "com.fasterxml.jackson.core:jackson-annotations"
+  compile "com.fasterxml.jackson.core:jackson-core"
+  compile "com.fasterxml.jackson.core:jackson-databind"
+  runtime "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
+  runtime "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+  runtime "com.fasterxml.jackson.module:jackson-module-kotlin"
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = "3.5"
+}
